@@ -24,28 +24,19 @@ public class AppUserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
 
     @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                String.format(USER_NOT_FOUND_MSG, email)));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return appUserRepository.findByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException(
+                String.format(USER_NOT_FOUND_MSG, email)));
     }
 
     public String signUpUser(AppUser appUser) {
-        boolean userExists = appUserRepository
-                .findByEmail(appUser.getEmail())
-                .isPresent();
 
-        if (userExists) {
-            // TODO check of attributes are the same and
-            // TODO if email not confirmed send confirmation email.
+        boolean userExists = appUserRepository.findByEmail(appUser.getEmail()).isPresent();
 
-            throw new IllegalStateException("email already taken");
-        }
+        if (userExists) {throw new IllegalStateException("email already taken");}
 
-        String encodedPassword = bCryptPasswordEncoder
-                .encode(appUser.getPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
 
         appUser.setPassword(encodedPassword);
 
@@ -60,10 +51,7 @@ public class AppUserService implements UserDetailsService {
                 appUser
         );
 
-        confirmationTokenService.saveConfirmationToken(
-                confirmationToken);
-
-//        TODO: SEND EMAIL
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
 
         return token;
     }

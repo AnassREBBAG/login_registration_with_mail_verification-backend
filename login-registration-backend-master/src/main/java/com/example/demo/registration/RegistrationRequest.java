@@ -1,5 +1,6 @@
 package com.example.demo.registration;
 
+import com.example.demo.appuser.AppUserRole;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class RegistrationRequest {
     private final String lastName;
     private final String email;
     private final String password;
+    private final AppUserRole appUserRole;
 
 
 
